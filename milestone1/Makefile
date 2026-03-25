@@ -1,0 +1,35 @@
+# ============================================================
+# Makefile — Fuzzy C-Means Serial Implementation
+# Member 1: Khansa Danish | IBA Karachi, Spring 2026
+#
+# Usage:
+#   make          — build ./fcm
+#   make run      — build and run on dummy data
+#   make clean    — remove compiled files
+# ============================================================
+
+CC      = gcc
+CFLAGS  = -Wall -Wextra -O2 -std=c99
+LIBS    = -lm
+TARGET  = fcm
+SRCS    = main.c fcm.c utils.c data.c normalisation.c metrics.c
+OBJS    = $(SRCS:.c=.o)
+
+# ── Default target ──────────────────────────────────────────
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LIBS)
+	@echo "Build successful → ./$(TARGET)"
+
+%.o: %.c fcm.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# ── Convenience targets ─────────────────────────────────────
+run: all
+	./$(TARGET)
+
+clean:
+	rm -f $(OBJS) $(TARGET) *.csv
+
+.PHONY: all run clean
