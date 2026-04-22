@@ -1,0 +1,690 @@
+=============================================
+Member 3 — Milestone 2 Experiment Suite
+Date: Mon Apr 20 10:15:20 UTC 2026
+=============================================
+
+=== EXPERIMENT 1: Communication Mode Comparison ===
+Config: NP=4, K-Means++, Block distribution
+--- Baseline (blocking) ---
+╔══════════════════════════════════════════════════╗
+║  Parallel FCM — Clinical Notes (OpenMPI)        ║
+║  Member 1: Khansa Danish | IBA Spring 2026      ║
+╚══════════════════════════════════════════════════╝
+[main] Features : features.csv
+[main] Labels   : specialty_labels.csv
+[main] Strategy : K-Means++
+[main] N=4943  F=500  C=10
+[rank 0] Loaded & L2-normalised 4943 x 500 matrix from 'features.csv'
+[main] Data load+scatter: 2.143 s
+
+[fcm_mpi] N=4943  F=500  C=10  P=4  m=1.1  eps=1e-05
+[init] K-Means++ init complete.
+[fcm_mpi] iter    1  delta=30.61786996  time=0.0146s
+[fcm_mpi] iter    2  delta=12.67445734  time=0.0171s
+[fcm_mpi] iter    3  delta=6.60358458  time=0.0408s
+[fcm_mpi] iter    4  delta=4.27949607  time=0.0086s
+[fcm_mpi] iter    5  delta=2.39154055  time=0.0239s
+[fcm_mpi] iter   10  delta=2.14683143  time=0.0078s
+[fcm_mpi] iter   20  delta=0.74739973  time=0.0103s
+[fcm_mpi] iter   30  delta=0.12054066  time=0.0080s
+[fcm_mpi] iter   40  delta=0.03964380  time=0.0249s
+[fcm_mpi] iter   50  delta=0.01844765  time=0.0073s
+[fcm_mpi] iter   60  delta=0.00980529  time=0.0079s
+[fcm_mpi] iter   70  delta=0.00545463  time=0.0071s
+[fcm_mpi] iter   80  delta=0.00317721  time=0.0071s
+[fcm_mpi] iter   90  delta=0.00198548  time=0.0072s
+[fcm_mpi] iter  100  delta=0.00135684  time=0.0071s
+[fcm_mpi] iter  110  delta=0.00100715  time=0.0072s
+[fcm_mpi] iter  120  delta=0.00079074  time=0.0070s
+[fcm_mpi] iter  130  delta=0.00064001  time=0.0108s
+[fcm_mpi] iter  140  delta=0.00052555  time=0.0071s
+[fcm_mpi] iter  150  delta=0.00043434  time=0.0077s
+[fcm_mpi] Reached MAX_ITER=150
+[main] FCM total time: 1.9941 s  (150 iters)
+[fcm_mpi] Membership saved -> membership_mpi_kmeanspp.csv
+[fcm_mpi] Centroids saved -> centroids_mpi_kmeanspp.csv
+
+[fcm_mpi] -- Summary --
+[fcm_mpi] Iterations : 150
+[fcm_mpi] Final delta: 4.34e-04
+[fcm_mpi] Cluster distribution:
+  Cluster  0 :  535 documents (10.8%)
+  Cluster  1 :  409 documents (8.3%)
+  Cluster  2 :  486 documents (9.8%)
+  Cluster  3 :  502 documents (10.2%)
+  Cluster  4 :  712 documents (14.4%)
+  Cluster  5 :  305 documents (6.2%)
+  Cluster  6 :  717 documents (14.5%)
+  Cluster  7 :  472 documents (9.5%)
+  Cluster  8 :  486 documents (9.8%)
+  Cluster  9 :  319 documents (6.5%)
+[fcm_mpi] Total wall time : 1.8713 s
+[fcm_mpi] Avg time/iter   : 0.0125 s
+
+--- Non-blocking optimized ---
+╔══════════════════════════════════════════════════╗
+║  Parallel FCM — Clinical Notes (OpenMPI)        ║
+║  Member 1: Khansa Danish | IBA Spring 2026      ║
+╚══════════════════════════════════════════════════╝
+[main] Features : features.csv
+[main] Labels   : specialty_labels.csv
+[main] Strategy : K-Means++
+[main] N=4943  F=500  C=10
+[rank 0] Loaded & L2-normalised 4943 x 500 matrix from 'features.csv'
+[main] Data load+scatter: 2.728 s
+
+[fcm_mpi] N=4943  F=500  C=10  P=4  m=1.1  eps=1e-05
+[init] K-Means++ init complete.
+[fcm_mpi] iter    1  delta=31.56427068  time=0.0113s
+[fcm_mpi] iter    2  delta=12.89406012  time=0.0108s
+[fcm_mpi] iter    3  delta=6.25760975  time=0.0229s
+[fcm_mpi] iter    4  delta=4.20443141  time=0.0090s
+[fcm_mpi] iter    5  delta=2.33342694  time=0.0306s
+[fcm_mpi] iter   10  delta=1.59289061  time=0.0166s
+[fcm_mpi] iter   20  delta=0.45815965  time=0.0084s
+[fcm_mpi] iter   30  delta=0.44022055  time=0.0112s
+[fcm_mpi] iter   40  delta=0.07935198  time=0.0126s
+[fcm_mpi] iter   50  delta=0.04011205  time=0.0110s
+[fcm_mpi] iter   60  delta=0.02663679  time=0.0088s
+[fcm_mpi] iter   70  delta=0.01896327  time=0.0070s
+[fcm_mpi] iter   80  delta=0.01407914  time=0.0070s
+[fcm_mpi] iter   90  delta=0.01077239  time=0.0109s
+[fcm_mpi] iter  100  delta=0.00842869  time=0.0071s
+[fcm_mpi] iter  110  delta=0.00670313  time=0.0079s
+[fcm_mpi] iter  120  delta=0.00539267  time=0.0077s
+[fcm_mpi] iter  130  delta=0.00437337  time=0.0077s
+[fcm_mpi] iter  140  delta=0.00356650  time=0.0078s
+[fcm_mpi] iter  150  delta=0.00291976  time=0.0087s
+[fcm_mpi] Reached MAX_ITER=150
+[main] FCM total time: 1.8535 s  (150 iters)
+[fcm_mpi] Membership saved -> membership_mpi_kmeanspp.csv
+[fcm_mpi] Centroids saved -> centroids_mpi_kmeanspp.csv
+
+[fcm_mpi] -- Summary --
+[fcm_mpi] Iterations : 150
+[fcm_mpi] Final delta: 2.92e-03
+[fcm_mpi] Cluster distribution:
+  Cluster  0 :  480 documents (9.7%)
+  Cluster  1 :  714 documents (14.4%)
+  Cluster  2 :  513 documents (10.4%)
+  Cluster  3 :  356 documents (7.2%)
+  Cluster  4 :    7 documents (0.1%)
+  Cluster  5 :  573 documents (11.6%)
+  Cluster  6 :  689 documents (13.9%)
+  Cluster  7 :  537 documents (10.9%)
+  Cluster  8 :  409 documents (8.3%)
+  Cluster  9 :  665 documents (13.5%)
+[fcm_mpi] Total wall time : 1.7439 s
+[fcm_mpi] Avg time/iter   : 0.0116 s
+
+=== EXPERIMENT 2: Distribution Strategy Comparison ===
+Config: NP=4, K-Means++, Baseline comm
+
+--- Distribution: block ---
+╔══════════════════════════════════════════════════╗
+║  Parallel FCM — Clinical Notes (OpenMPI)        ║
+║  Member 1: Khansa Danish | IBA Spring 2026      ║
+╚══════════════════════════════════════════════════╝
+[main] Features : features.csv
+[main] Labels   : specialty_labels.csv
+[main] Strategy : K-Means++
+[main] N=4943  F=500  C=10
+[rank 0] Loaded & L2-normalised 4943 x 500 matrix from 'features.csv'
+[main] Data load+scatter: 2.508 s
+
+[fcm_mpi] N=4943  F=500  C=10  P=4  m=1.1  eps=1e-05
+[init] K-Means++ init complete.
+[fcm_mpi] iter    1  delta=30.77884232  time=0.0104s
+[fcm_mpi] iter    2  delta=13.12700105  time=0.0265s
+[fcm_mpi] iter    3  delta=6.17164449  time=0.0231s
+[fcm_mpi] iter    4  delta=3.69081017  time=0.0219s
+[fcm_mpi] iter    5  delta=2.62482861  time=0.0209s
+[fcm_mpi] iter   10  delta=1.67623376  time=0.0102s
+[fcm_mpi] iter   20  delta=0.22407533  time=0.0095s
+[fcm_mpi] iter   30  delta=0.05716869  time=0.0248s
+[fcm_mpi] iter   40  delta=0.03153664  time=0.0076s
+[fcm_mpi] iter   50  delta=0.02192649  time=0.0072s
+[fcm_mpi] iter   60  delta=0.01675720  time=0.0116s
+[fcm_mpi] iter   70  delta=0.01337841  time=0.0076s
+[fcm_mpi] iter   80  delta=0.01090432  time=0.0074s
+[fcm_mpi] iter   90  delta=0.00897464  time=0.0111s
+[fcm_mpi] iter  100  delta=0.00742010  time=0.0078s
+[fcm_mpi] iter  110  delta=0.00614803  time=0.0106s
+[fcm_mpi] iter  120  delta=0.00509936  time=0.0075s
+[fcm_mpi] iter  130  delta=0.00423179  time=0.0114s
+[fcm_mpi] iter  140  delta=0.00351281  time=0.0080s
+[fcm_mpi] iter  150  delta=0.00291645  time=0.0074s
+[fcm_mpi] Reached MAX_ITER=150
+[main] FCM total time: 1.8269 s  (150 iters)
+[fcm_mpi] Membership saved -> membership_mpi_kmeanspp.csv
+[fcm_mpi] Centroids saved -> centroids_mpi_kmeanspp.csv
+
+[fcm_mpi] -- Summary --
+[fcm_mpi] Iterations : 150
+[fcm_mpi] Final delta: 2.92e-03
+[fcm_mpi] Cluster distribution:
+  Cluster  0 :  367 documents (7.4%)
+  Cluster  1 :  309 documents (6.3%)
+  Cluster  2 :  486 documents (9.8%)
+  Cluster  3 :  708 documents (14.3%)
+  Cluster  4 :  479 documents (9.7%)
+  Cluster  5 :  715 documents (14.5%)
+  Cluster  6 :  528 documents (10.7%)
+  Cluster  7 :  502 documents (10.2%)
+  Cluster  8 :  316 documents (6.4%)
+  Cluster  9 :  533 documents (10.8%)
+[fcm_mpi] Total wall time : 1.7156 s
+[fcm_mpi] Avg time/iter   : 0.0114 s
+
+--- Distribution: cyclic ---
+╔══════════════════════════════════════════════════╗
+║  Parallel FCM — Clinical Notes (OpenMPI)        ║
+║  Member 1: Khansa Danish | IBA Spring 2026      ║
+╚══════════════════════════════════════════════════╝
+[main] Features : features.csv
+[main] Labels   : specialty_labels.csv
+[main] Strategy : K-Means++
+[main] N=4943  F=500  C=10
+[rank 0] Loaded & L2-normalised 4943 x 500 matrix from 'features.csv'
+[main] Data load+scatter: 2.314 s
+
+[fcm_mpi] N=4943  F=500  C=10  P=4  m=1.1  eps=1e-05
+[init] K-Means++ init complete.
+[fcm_mpi] iter    1  delta=31.22264850  time=0.0077s
+[fcm_mpi] iter    2  delta=12.19275270  time=0.0236s
+[fcm_mpi] iter    3  delta=5.20763937  time=0.0407s
+[fcm_mpi] iter    4  delta=3.66129616  time=0.0218s
+[fcm_mpi] iter    5  delta=3.24624494  time=0.0212s
+[fcm_mpi] iter   10  delta=1.09503889  time=0.0083s
+[fcm_mpi] iter   20  delta=0.37827816  time=0.0206s
+[fcm_mpi] iter   30  delta=0.09569132  time=0.0072s
+[fcm_mpi] iter   40  delta=0.04481805  time=0.0092s
+[fcm_mpi] iter   50  delta=0.02463457  time=0.0179s
+[fcm_mpi] iter   60  delta=0.01475579  time=0.0072s
+[fcm_mpi] iter   70  delta=0.00966113  time=0.0071s
+[fcm_mpi] iter   80  delta=0.00692315  time=0.0115s
+[fcm_mpi] iter   90  delta=0.00531682  time=0.0108s
+[fcm_mpi] iter  100  delta=0.00425414  time=0.0108s
+[fcm_mpi] iter  110  delta=0.00347444  time=0.0072s
+[fcm_mpi] iter  120  delta=0.00286441  time=0.0073s
+[fcm_mpi] iter  130  delta=0.00237125  time=0.0096s
+[fcm_mpi] iter  140  delta=0.00196650  time=0.0074s
+[fcm_mpi] iter  150  delta=0.00163210  time=0.0076s
+[fcm_mpi] Reached MAX_ITER=150
+[main] FCM total time: 2.0771 s  (150 iters)
+[fcm_mpi] Membership saved -> membership_mpi_kmeanspp.csv
+[fcm_mpi] Centroids saved -> centroids_mpi_kmeanspp.csv
+
+[fcm_mpi] -- Summary --
+[fcm_mpi] Iterations : 150
+[fcm_mpi] Final delta: 1.63e-03
+[fcm_mpi] Cluster distribution:
+  Cluster  0 :  528 documents (10.7%)
+  Cluster  1 :  502 documents (10.2%)
+  Cluster  2 :  307 documents (6.2%)
+  Cluster  3 :  319 documents (6.5%)
+  Cluster  4 :  367 documents (7.4%)
+  Cluster  5 :  486 documents (9.8%)
+  Cluster  6 :  474 documents (9.6%)
+  Cluster  7 :  710 documents (14.4%)
+  Cluster  8 :  533 documents (10.8%)
+  Cluster  9 :  717 documents (14.5%)
+[fcm_mpi] Total wall time : 1.9995 s
+[fcm_mpi] Avg time/iter   : 0.0133 s
+
+--- Distribution: dynamic ---
+╔══════════════════════════════════════════════════╗
+║  Parallel FCM — Clinical Notes (OpenMPI)        ║
+║  Member 1: Khansa Danish | IBA Spring 2026      ║
+╚══════════════════════════════════════════════════╝
+[main] Features : features.csv
+[main] Labels   : specialty_labels.csv
+[main] Strategy : K-Means++
+[main] N=4943  F=500  C=10
+[rank 0] Loaded & L2-normalised 4943 x 500 matrix from 'features.csv'
+[main] Data load+scatter: 1.980 s
+
+[fcm_mpi] N=4943  F=500  C=10  P=4  m=1.1  eps=1e-05
+[init] K-Means++ init complete.
+[fcm_mpi] iter    1  delta=30.02313512  time=0.0120s
+[fcm_mpi] iter    2  delta=13.04560178  time=0.0092s
+[fcm_mpi] iter    3  delta=5.60229121  time=0.0085s
+[fcm_mpi] iter    4  delta=3.87153974  time=0.0088s
+[fcm_mpi] iter    5  delta=4.00143467  time=0.0226s
+[fcm_mpi] iter   10  delta=1.80681719  time=0.0148s
+[fcm_mpi] iter   20  delta=1.01203653  time=0.0078s
+[fcm_mpi] iter   30  delta=0.06339947  time=0.0075s
+[fcm_mpi] iter   40  delta=0.02642951  time=0.0078s
+[fcm_mpi] iter   50  delta=0.02942862  time=0.0077s
+[fcm_mpi] iter   60  delta=0.07762011  time=0.0103s
+[fcm_mpi] iter   70  delta=0.38715134  time=0.0077s
+[fcm_mpi] iter   80  delta=0.12170693  time=0.0072s
+[fcm_mpi] iter   90  delta=0.00757437  time=0.0083s
+[fcm_mpi] iter  100  delta=0.00177554  time=0.0113s
+[fcm_mpi] iter  110  delta=0.00068499  time=0.0113s
+[fcm_mpi] iter  120  delta=0.00042657  time=0.0078s
+[fcm_mpi] iter  130  delta=0.00032903  time=0.0208s
+[fcm_mpi] iter  140  delta=0.00026719  time=0.0120s
+[fcm_mpi] iter  150  delta=0.00022003  time=0.0076s
+[fcm_mpi] Reached MAX_ITER=150
+[main] FCM total time: 1.7742 s  (150 iters)
+[fcm_mpi] Membership saved -> membership_mpi_kmeanspp.csv
+[fcm_mpi] Centroids saved -> centroids_mpi_kmeanspp.csv
+
+[fcm_mpi] -- Summary --
+[fcm_mpi] Iterations : 150
+[fcm_mpi] Final delta: 2.20e-04
+[fcm_mpi] Cluster distribution:
+  Cluster  0 :  712 documents (14.4%)
+  Cluster  1 :  486 documents (9.8%)
+  Cluster  2 :  305 documents (6.2%)
+  Cluster  3 :  717 documents (14.5%)
+  Cluster  4 :  502 documents (10.2%)
+  Cluster  5 :  577 documents (11.7%)
+  Cluster  6 :  367 documents (7.4%)
+  Cluster  7 :  486 documents (9.8%)
+  Cluster  8 :  472 documents (9.5%)
+  Cluster  9 :  319 documents (6.5%)
+[fcm_mpi] Total wall time : 1.6946 s
+[fcm_mpi] Avg time/iter   : 0.0113 s
+
+=== EXPERIMENT 3: Strong Scaling ===
+Config: K-Means++, Block, Baseline comm
+
+--- NP=1 ---
+╔══════════════════════════════════════════════════╗
+║  Parallel FCM — Clinical Notes (OpenMPI)        ║
+║  Member 1: Khansa Danish | IBA Spring 2026      ║
+╚══════════════════════════════════════════════════╝
+[main] Features : features.csv
+[main] Labels   : specialty_labels.csv
+[main] Strategy : K-Means++
+[main] N=4943  F=500  C=10
+[rank 0] Loaded & L2-normalised 4943 x 500 matrix from 'features.csv'
+[main] Data load+scatter: 0.848 s
+
+[fcm_mpi] N=4943  F=500  C=10  P=1  m=1.1  eps=1e-05
+[init] K-Means++ init complete.
+[fcm_mpi] iter    1  delta=31.12723278  time=0.0283s
+[fcm_mpi] iter    2  delta=12.20851092  time=0.0294s
+[fcm_mpi] iter    3  delta=6.19814621  time=0.0284s
+[fcm_mpi] iter    4  delta=5.50838054  time=0.0294s
+[fcm_mpi] iter    5  delta=3.87334135  time=0.0286s
+[fcm_mpi] iter   10  delta=1.56294099  time=0.0253s
+[fcm_mpi] iter   20  delta=0.53078937  time=0.0253s
+[fcm_mpi] iter   30  delta=0.09682174  time=0.0247s
+[fcm_mpi] iter   40  delta=0.03712285  time=0.0247s
+[fcm_mpi] iter   50  delta=0.01852907  time=0.0250s
+[fcm_mpi] iter   60  delta=0.00980201  time=0.0258s
+[fcm_mpi] iter   70  delta=0.00526347  time=0.0259s
+[fcm_mpi] iter   80  delta=0.00283926  time=0.0268s
+[fcm_mpi] iter   90  delta=0.00153603  time=0.0269s
+[fcm_mpi] iter  100  delta=0.00083495  time=0.0262s
+[fcm_mpi] iter  110  delta=0.00045857  time=0.0240s
+[fcm_mpi] iter  120  delta=0.00025755  time=0.0259s
+[fcm_mpi] iter  130  delta=0.00015117  time=0.0257s
+[fcm_mpi] iter  140  delta=0.00009539  time=0.0263s
+[fcm_mpi] iter  150  delta=0.00006586  time=0.0262s
+[fcm_mpi] Reached MAX_ITER=150
+[main] FCM total time: 3.9705 s  (150 iters)
+[fcm_mpi] Membership saved -> membership_mpi_kmeanspp.csv
+[fcm_mpi] Centroids saved -> centroids_mpi_kmeanspp.csv
+
+[fcm_mpi] -- Summary --
+[fcm_mpi] Iterations : 150
+[fcm_mpi] Final delta: 6.59e-05
+[fcm_mpi] Cluster distribution:
+  Cluster  0 :  367 documents (7.4%)
+  Cluster  1 :  719 documents (14.5%)
+  Cluster  2 :  303 documents (6.1%)
+  Cluster  3 :  472 documents (9.5%)
+  Cluster  4 :  535 documents (10.8%)
+  Cluster  5 :  712 documents (14.4%)
+  Cluster  6 :  486 documents (9.8%)
+  Cluster  7 :  502 documents (10.2%)
+  Cluster  8 :  361 documents (7.3%)
+  Cluster  9 :  486 documents (9.8%)
+[fcm_mpi] Total wall time : 3.9025 s
+[fcm_mpi] Avg time/iter   : 0.0260 s
+
+--- NP=2 ---
+╔══════════════════════════════════════════════════╗
+║  Parallel FCM — Clinical Notes (OpenMPI)        ║
+║  Member 1: Khansa Danish | IBA Spring 2026      ║
+╚══════════════════════════════════════════════════╝
+[main] Features : features.csv
+[main] Labels   : specialty_labels.csv
+[main] Strategy : K-Means++
+[main] N=4943  F=500  C=10
+[rank 0] Loaded & L2-normalised 4943 x 500 matrix from 'features.csv'
+[main] Data load+scatter: 0.792 s
+
+[fcm_mpi] N=4943  F=500  C=10  P=2  m=1.1  eps=1e-05
+[init] K-Means++ init complete.
+[fcm_mpi] iter    1  delta=30.93465328  time=0.0146s
+[fcm_mpi] iter    2  delta=12.42594330  time=0.0154s
+[fcm_mpi] iter    3  delta=4.97454617  time=0.0157s
+[fcm_mpi] iter    4  delta=3.07041960  time=0.0156s
+[fcm_mpi] iter    5  delta=2.61813923  time=0.0152s
+[fcm_mpi] iter   10  delta=3.90912561  time=0.0139s
+[fcm_mpi] iter   20  delta=0.48380766  time=0.0135s
+[fcm_mpi] iter   30  delta=0.13795471  time=0.0149s
+[fcm_mpi] iter   40  delta=0.02696753  time=0.0140s
+[fcm_mpi] iter   50  delta=0.01798997  time=0.0141s
+[fcm_mpi] iter   60  delta=0.01466714  time=0.0139s
+[fcm_mpi] iter   70  delta=0.01216216  time=0.0150s
+[fcm_mpi] iter   80  delta=0.01008843  time=0.0138s
+[fcm_mpi] iter   90  delta=0.00836742  time=0.0138s
+[fcm_mpi] iter  100  delta=0.00694132  time=0.0145s
+[fcm_mpi] iter  110  delta=0.00575978  time=0.0165s
+[fcm_mpi] iter  120  delta=0.00478044  time=0.0140s
+[fcm_mpi] iter  130  delta=0.00396831  time=0.0146s
+[fcm_mpi] iter  140  delta=0.00329457  time=0.0139s
+[fcm_mpi] iter  150  delta=0.00273545  time=0.0142s
+[fcm_mpi] Reached MAX_ITER=150
+[main] FCM total time: 2.3276 s  (150 iters)
+[fcm_mpi] Membership saved -> membership_mpi_kmeanspp.csv
+[fcm_mpi] Centroids saved -> centroids_mpi_kmeanspp.csv
+
+[fcm_mpi] -- Summary --
+[fcm_mpi] Iterations : 150
+[fcm_mpi] Final delta: 2.74e-03
+[fcm_mpi] Cluster distribution:
+  Cluster  0 :  367 documents (7.4%)
+  Cluster  1 :  486 documents (9.8%)
+  Cluster  2 :  309 documents (6.3%)
+  Cluster  3 :  486 documents (9.8%)
+  Cluster  4 :  715 documents (14.5%)
+  Cluster  5 :  316 documents (6.4%)
+  Cluster  6 :  750 documents (15.2%)
+  Cluster  7 :  533 documents (10.8%)
+  Cluster  8 :  502 documents (10.2%)
+  Cluster  9 :  479 documents (9.7%)
+[fcm_mpi] Total wall time : 2.2566 s
+[fcm_mpi] Avg time/iter   : 0.0150 s
+
+--- NP=4 ---
+╔══════════════════════════════════════════════════╗
+║  Parallel FCM — Clinical Notes (OpenMPI)        ║
+║  Member 1: Khansa Danish | IBA Spring 2026      ║
+╚══════════════════════════════════════════════════╝
+[main] Features : features.csv
+[main] Labels   : specialty_labels.csv
+[main] Strategy : K-Means++
+[main] N=4943  F=500  C=10
+[rank 0] Loaded & L2-normalised 4943 x 500 matrix from 'features.csv'
+[main] Data load+scatter: 2.366 s
+
+[fcm_mpi] N=4943  F=500  C=10  P=4  m=1.1  eps=1e-05
+[init] K-Means++ init complete.
+[fcm_mpi] iter    1  delta=32.27976354  time=0.0088s
+[fcm_mpi] iter    2  delta=12.53980694  time=0.0089s
+[fcm_mpi] iter    3  delta=5.57684617  time=0.0097s
+[fcm_mpi] iter    4  delta=4.36300923  time=0.0093s
+[fcm_mpi] iter    5  delta=4.61718488  time=0.0083s
+[fcm_mpi] iter   10  delta=1.31465326  time=0.0113s
+[fcm_mpi] iter   20  delta=0.28120789  time=0.0080s
+[fcm_mpi] iter   30  delta=0.35183552  time=0.0078s
+[fcm_mpi] iter   40  delta=0.28565984  time=0.0094s
+[fcm_mpi] iter   50  delta=0.06843557  time=0.0080s
+[fcm_mpi] iter   60  delta=0.03533437  time=0.0076s
+[fcm_mpi] iter   70  delta=0.01962494  time=0.0084s
+[fcm_mpi] iter   80  delta=0.01153199  time=0.0129s
+[fcm_mpi] iter   90  delta=0.00731999  time=0.0078s
+[fcm_mpi] iter  100  delta=0.00508831  time=0.0076s
+[fcm_mpi] iter  110  delta=0.00382589  time=0.0076s
+[fcm_mpi] iter  120  delta=0.00302609  time=0.0076s
+[fcm_mpi] iter  130  delta=0.00245802  time=0.0104s
+[fcm_mpi] iter  140  delta=0.00202161  time=0.0078s
+[fcm_mpi] iter  150  delta=0.00167188  time=0.0077s
+[fcm_mpi] Reached MAX_ITER=150
+[main] FCM total time: 1.4211 s  (150 iters)
+[fcm_mpi] Membership saved -> membership_mpi_kmeanspp.csv
+[fcm_mpi] Centroids saved -> centroids_mpi_kmeanspp.csv
+
+[fcm_mpi] -- Summary --
+[fcm_mpi] Iterations : 150
+[fcm_mpi] Final delta: 1.67e-03
+[fcm_mpi] Cluster distribution:
+  Cluster  0 :  710 documents (14.4%)
+  Cluster  1 :  474 documents (9.6%)
+  Cluster  2 :  486 documents (9.8%)
+  Cluster  3 :  486 documents (9.8%)
+  Cluster  4 :  502 documents (10.2%)
+  Cluster  5 :  319 documents (6.5%)
+  Cluster  6 :  533 documents (10.8%)
+  Cluster  7 :  717 documents (14.5%)
+  Cluster  8 :  367 documents (7.4%)
+  Cluster  9 :  349 documents (7.1%)
+[fcm_mpi] Total wall time : 1.3418 s
+[fcm_mpi] Avg time/iter   : 0.0089 s
+
+--- NP=8 ---
+╔══════════════════════════════════════════════════╗
+║  Parallel FCM — Clinical Notes (OpenMPI)        ║
+║  Member 1: Khansa Danish | IBA Spring 2026      ║
+╚══════════════════════════════════════════════════╝
+[main] Features : features.csv
+[main] Labels   : specialty_labels.csv
+[main] Strategy : K-Means++
+[main] N=4943  F=500  C=10
+[rank 0] Loaded & L2-normalised 4943 x 500 matrix from 'features.csv'
+[main] Data load+scatter: 5.584 s
+
+[fcm_mpi] N=4943  F=500  C=10  P=8  m=1.1  eps=1e-05
+[init] K-Means++ init complete.
+[fcm_mpi] iter    1  delta=31.02710586  time=0.0144s
+[fcm_mpi] iter    2  delta=12.60908527  time=0.0143s
+[fcm_mpi] iter    3  delta=5.10955983  time=0.0315s
+[fcm_mpi] iter    4  delta=3.88748760  time=0.0407s
+[fcm_mpi] iter    5  delta=4.64720936  time=0.0430s
+[fcm_mpi] iter   10  delta=0.72203557  time=0.0381s
+[fcm_mpi] iter   20  delta=0.19702441  time=0.0089s
+[fcm_mpi] iter   30  delta=0.37247542  time=0.0141s
+[fcm_mpi] iter   40  delta=0.16923642  time=0.0137s
+[fcm_mpi] iter   50  delta=0.02743553  time=0.0140s
+[fcm_mpi] iter   60  delta=0.01722628  time=0.0118s
+[fcm_mpi] iter   70  delta=0.01370468  time=0.0140s
+[fcm_mpi] iter   80  delta=0.01127031  time=0.0121s
+[fcm_mpi] iter   90  delta=0.00931972  time=0.0137s
+[fcm_mpi] iter  100  delta=0.00772085  time=0.0143s
+[fcm_mpi] iter  110  delta=0.00640234  time=0.0141s
+[fcm_mpi] iter  120  delta=0.00531192  time=0.0140s
+[fcm_mpi] iter  130  delta=0.00440867  time=0.0137s
+[fcm_mpi] iter  140  delta=0.00365977  time=0.0143s
+[fcm_mpi] iter  150  delta=0.00303849  time=0.0140s
+[fcm_mpi] Reached MAX_ITER=150
+[main] FCM total time: 2.5440 s  (150 iters)
+[fcm_mpi] Membership saved -> membership_mpi_kmeanspp.csv
+[fcm_mpi] Centroids saved -> centroids_mpi_kmeanspp.csv
+
+[fcm_mpi] -- Summary --
+[fcm_mpi] Iterations : 150
+[fcm_mpi] Final delta: 3.04e-03
+[fcm_mpi] Cluster distribution:
+  Cluster  0 :  715 documents (14.5%)
+  Cluster  1 :  479 documents (9.7%)
+  Cluster  2 :  533 documents (10.8%)
+  Cluster  3 :  708 documents (14.3%)
+  Cluster  4 :  309 documents (6.3%)
+  Cluster  5 :  367 documents (7.4%)
+  Cluster  6 :  486 documents (9.8%)
+  Cluster  7 :  502 documents (10.2%)
+  Cluster  8 :  316 documents (6.4%)
+  Cluster  9 :  528 documents (10.7%)
+[fcm_mpi] Total wall time : 2.3718 s
+[fcm_mpi] Avg time/iter   : 0.0158 s
+
+=== EXPERIMENT 4: Consistency/Reproducibility Check ===
+Config: NP=4, K-Means++, Block, Baseline
+--- Run 1 ---
+╔══════════════════════════════════════════════════╗
+║  Parallel FCM — Clinical Notes (OpenMPI)        ║
+║  Member 1: Khansa Danish | IBA Spring 2026      ║
+╚══════════════════════════════════════════════════╝
+[main] Features : features.csv
+[main] Labels   : specialty_labels.csv
+[main] Strategy : K-Means++
+[main] N=4943  F=500  C=10
+[rank 0] Loaded & L2-normalised 4943 x 500 matrix from 'features.csv'
+[main] Data load+scatter: 2.026 s
+
+[fcm_mpi] N=4943  F=500  C=10  P=4  m=1.1  eps=1e-05
+[init] K-Means++ init complete.
+[fcm_mpi] iter    1  delta=30.87020296  time=0.0092s
+[fcm_mpi] iter    2  delta=13.11182745  time=0.0104s
+[fcm_mpi] iter    3  delta=5.79911941  time=0.0092s
+[fcm_mpi] iter    4  delta=3.14706401  time=0.0097s
+[fcm_mpi] iter    5  delta=2.16016080  time=0.0082s
+[fcm_mpi] iter   10  delta=1.91530205  time=0.0083s
+[fcm_mpi] iter   20  delta=0.15012276  time=0.0197s
+[fcm_mpi] iter   30  delta=0.06371970  time=0.0074s
+[fcm_mpi] iter   40  delta=0.08669111  time=0.0078s
+[fcm_mpi] iter   50  delta=0.13985141  time=0.0078s
+[fcm_mpi] iter   60  delta=0.13117512  time=0.0084s
+[fcm_mpi] iter   70  delta=0.07418314  time=0.0079s
+[fcm_mpi] iter   80  delta=0.12487829  time=0.0078s
+[fcm_mpi] iter   90  delta=0.51909227  time=0.0124s
+[fcm_mpi] iter  100  delta=0.04137052  time=0.0077s
+[fcm_mpi] iter  110  delta=0.00493746  time=0.0077s
+[fcm_mpi] iter  120  delta=0.00309340  time=0.0077s
+[fcm_mpi] iter  130  delta=0.00249399  time=0.0080s
+[fcm_mpi] iter  140  delta=0.00206426  time=0.0075s
+[fcm_mpi] iter  150  delta=0.00171340  time=0.0079s
+[fcm_mpi] Reached MAX_ITER=150
+[main] FCM total time: 1.3734 s  (150 iters)
+[fcm_mpi] Membership saved -> membership_mpi_kmeanspp.csv
+[fcm_mpi] Centroids saved -> centroids_mpi_kmeanspp.csv
+
+[fcm_mpi] -- Summary --
+[fcm_mpi] Iterations : 150
+[fcm_mpi] Final delta: 1.71e-03
+[fcm_mpi] Cluster distribution:
+  Cluster  0 :  361 documents (7.3%)
+  Cluster  1 :  486 documents (9.8%)
+  Cluster  2 :  717 documents (14.5%)
+  Cluster  3 :  307 documents (6.2%)
+  Cluster  4 :  474 documents (9.6%)
+  Cluster  5 :  486 documents (9.8%)
+  Cluster  6 :  710 documents (14.4%)
+  Cluster  7 :  533 documents (10.8%)
+  Cluster  8 :  502 documents (10.2%)
+  Cluster  9 :  367 documents (7.4%)
+[fcm_mpi] Total wall time : 1.2891 s
+[fcm_mpi] Avg time/iter   : 0.0086 s
+--- Run 2 ---
+╔══════════════════════════════════════════════════╗
+║  Parallel FCM — Clinical Notes (OpenMPI)        ║
+║  Member 1: Khansa Danish | IBA Spring 2026      ║
+╚══════════════════════════════════════════════════╝
+[main] Features : features.csv
+[main] Labels   : specialty_labels.csv
+[main] Strategy : K-Means++
+[main] N=4943  F=500  C=10
+[rank 0] Loaded & L2-normalised 4943 x 500 matrix from 'features.csv'
+[main] Data load+scatter: 2.058 s
+
+[fcm_mpi] N=4943  F=500  C=10  P=4  m=1.1  eps=1e-05
+[init] K-Means++ init complete.
+[fcm_mpi] iter    1  delta=29.60579396  time=0.0093s
+[fcm_mpi] iter    2  delta=12.31045789  time=0.0096s
+[fcm_mpi] iter    3  delta=5.08892873  time=0.0096s
+[fcm_mpi] iter    4  delta=3.04413695  time=0.0111s
+[fcm_mpi] iter    5  delta=2.18739263  time=0.0097s
+[fcm_mpi] iter   10  delta=1.99416008  time=0.0085s
+[fcm_mpi] iter   20  delta=0.71423799  time=0.0112s
+[fcm_mpi] iter   30  delta=0.51981574  time=0.0078s
+[fcm_mpi] iter   40  delta=0.08595418  time=0.0077s
+[fcm_mpi] iter   50  delta=0.03246336  time=0.0083s
+[fcm_mpi] iter   60  delta=0.02248548  time=0.0075s
+[fcm_mpi] iter   70  delta=0.01725492  time=0.0076s
+[fcm_mpi] iter   80  delta=0.01381309  time=0.0078s
+[fcm_mpi] iter   90  delta=0.01127300  time=0.0079s
+[fcm_mpi] iter  100  delta=0.00928288  time=0.0076s
+[fcm_mpi] iter  110  delta=0.00767636  time=0.0078s
+[fcm_mpi] iter  120  delta=0.00636067  time=0.0075s
+[fcm_mpi] iter  130  delta=0.00527574  time=0.0077s
+[fcm_mpi] iter  140  delta=0.00437811  time=0.0079s
+[fcm_mpi] iter  150  delta=0.00363422  time=0.0078s
+[fcm_mpi] Reached MAX_ITER=150
+[main] FCM total time: 1.3682 s  (150 iters)
+[fcm_mpi] Membership saved -> membership_mpi_kmeanspp.csv
+[fcm_mpi] Centroids saved -> centroids_mpi_kmeanspp.csv
+
+[fcm_mpi] -- Summary --
+[fcm_mpi] Iterations : 150
+[fcm_mpi] Final delta: 3.63e-03
+[fcm_mpi] Cluster distribution:
+  Cluster  0 :  486 documents (9.8%)
+  Cluster  1 :  316 documents (6.4%)
+  Cluster  2 :  367 documents (7.4%)
+  Cluster  3 :  502 documents (10.2%)
+  Cluster  4 :  533 documents (10.8%)
+  Cluster  5 :  479 documents (9.7%)
+  Cluster  6 :  708 documents (14.3%)
+  Cluster  7 :  715 documents (14.5%)
+  Cluster  8 :  528 documents (10.7%)
+  Cluster  9 :  309 documents (6.3%)
+[fcm_mpi] Total wall time : 1.2883 s
+[fcm_mpi] Avg time/iter   : 0.0086 s
+--- Run 3 ---
+╔══════════════════════════════════════════════════╗
+║  Parallel FCM — Clinical Notes (OpenMPI)        ║
+║  Member 1: Khansa Danish | IBA Spring 2026      ║
+╚══════════════════════════════════════════════════╝
+[main] Features : features.csv
+[main] Labels   : specialty_labels.csv
+[main] Strategy : K-Means++
+[main] N=4943  F=500  C=10
+[rank 0] Loaded & L2-normalised 4943 x 500 matrix from 'features.csv'
+[main] Data load+scatter: 2.320 s
+
+[fcm_mpi] N=4943  F=500  C=10  P=4  m=1.1  eps=1e-05
+[init] K-Means++ init complete.
+[fcm_mpi] iter    1  delta=31.51100500  time=0.0093s
+[fcm_mpi] iter    2  delta=12.21641619  time=0.0093s
+[fcm_mpi] iter    3  delta=4.69055843  time=0.0092s
+[fcm_mpi] iter    4  delta=2.80284256  time=0.0096s
+[fcm_mpi] iter    5  delta=2.18229421  time=0.0092s
+[fcm_mpi] iter   10  delta=2.58880586  time=0.0102s
+[fcm_mpi] iter   20  delta=0.96408190  time=0.0091s
+[fcm_mpi] iter   30  delta=0.37294063  time=0.0121s
+[fcm_mpi] iter   40  delta=0.39151951  time=0.0078s
+[fcm_mpi] iter   50  delta=0.04876570  time=0.0131s
+[fcm_mpi] iter   60  delta=0.02938626  time=0.0127s
+[fcm_mpi] iter   70  delta=0.02288324  time=0.0123s
+[fcm_mpi] iter   80  delta=0.01855884  time=0.0081s
+[fcm_mpi] iter   90  delta=0.01523036  time=0.0088s
+[fcm_mpi] iter  100  delta=0.01256367  time=0.0075s
+[fcm_mpi] iter  110  delta=0.01039204  time=0.0087s
+[fcm_mpi] iter  120  delta=0.00860888  time=0.0071s
+[fcm_mpi] iter  130  delta=0.00713806  time=0.0081s
+[fcm_mpi] iter  140  delta=0.00592176  time=0.0079s
+[fcm_mpi] iter  150  delta=0.00491440  time=0.0088s
+[fcm_mpi] Reached MAX_ITER=150
+[main] FCM total time: 1.6191 s  (150 iters)
+[fcm_mpi] Membership saved -> membership_mpi_kmeanspp.csv
+[fcm_mpi] Centroids saved -> centroids_mpi_kmeanspp.csv
+
+[fcm_mpi] -- Summary --
+[fcm_mpi] Iterations : 150
+[fcm_mpi] Final delta: 4.91e-03
+[fcm_mpi] Cluster distribution:
+  Cluster  0 :  533 documents (10.8%)
+  Cluster  1 :  486 documents (9.8%)
+  Cluster  2 :  706 documents (14.3%)
+  Cluster  3 :  409 documents (8.3%)
+  Cluster  4 :  715 documents (14.5%)
+  Cluster  5 :  481 documents (9.7%)
+  Cluster  6 :  486 documents (9.8%)
+  Cluster  7 :  502 documents (10.2%)
+  Cluster  8 :  313 documents (6.3%)
+  Cluster  9 :  312 documents (6.3%)
+[fcm_mpi] Total wall time : 1.5360 s
+[fcm_mpi] Avg time/iter   : 0.0102 s
+
+=============================================
+All experiments complete. Results in experiment_results/
+Run: python3 evaluate_metrics.py <mem.csv> <cen.csv> features.csv
+  on each output to compute quality metrics.
+=============================================
