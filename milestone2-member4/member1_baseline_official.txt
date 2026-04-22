@@ -1,0 +1,12 @@
+# Member 1 Official Baseline Results
+# Config: C=10, m=1.1, eps=1e-5, MAX_ITER=150, K-Means++, Block distribution
+# Runner: Khansa Danish | IBA Karachi, Spring 2026
+
+np=1  iters=150  final_delta=8.71e-04  total_wall_time=4.7829s  avg_iter=0.0319s
+np=2  iters=150  final_delta=4.03e-03  total_wall_time=2.8292s  avg_iter=0.0189s
+np=3  iters=150  final_delta=3.55e-03  total_wall_time=2.3859s  avg_iter=0.0159s
+np=4  iters=150  final_delta=1.39e-03  total_wall_time=1.9982s  avg_iter=0.0133s
+np=5  iters=150  final_delta=5.12e-04  total_wall_time=2.2269s  avg_iter=0.0148s
+np=6  iters=150  final_delta=3.25e-03  total_wall_time=1.8900s  avg_iter=0.0126s
+np=7  iters=150  final_delta=9.43e-04  total_wall_time=1.6505s  avg_iter=0.0110s
+np=8  iters=150  final_delta=1.52e-03  total_wall_time=1.4815s  avg_iter=0.0099s

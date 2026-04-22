@@ -1,0 +1,582 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{float}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric, fit, backgrounds}
+
+% ── Colours ─────────────────────────────────────────────────
+\definecolor{ibaBlue}{RGB}{31,78,121}
+\definecolor{codeGray}{RGB}{245,245,245}
+\definecolor{codeBorder}{RGB}{200,200,200}
+\definecolor{keywordBlue}{RGB}{0,0,180}
+\definecolor{commentGreen}{RGB}{0,128,0}
+\definecolor{stringRed}{RGB}{160,0,0}
+\definecolor{mpiOrange}{RGB}{200,100,0}
+
+% ── Code style ───────────────────────────────────────────────
+\lstdefinestyle{cstyle}{
+    backgroundcolor=\color{codeGray},
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{keywordBlue}\bfseries,
+    commentstyle=\color{commentGreen}\itshape,
+    stringstyle=\color{stringRed},
+    numberstyle=\tiny\color{gray},
+    numbers=left, numbersep=8pt,
+    frame=single, rulecolor=\color{codeBorder},
+    breaklines=true, captionpos=b,
+    language=C, tabsize=4,
+    showstringspaces=false
+}
+\lstdefinestyle{bashstyle}{
+    backgroundcolor=\color{black!90},
+    basicstyle=\ttfamily\small\color{white},
+    frame=single, rulecolor=\color{black},
+    breaklines=true, captionpos=b,
+    tabsize=4, showstringspaces=false
+}
+
+% ── Section formatting ───────────────────────────────────────
+\titleformat{\section}{\large\bfseries\color{ibaBlue}}{\thesection.}{0.5em}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries\color{ibaBlue}}{\thesubsection.}{0.5em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection.}{0.5em}{}
+
+% ── Header / Footer ─────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\textcolor{ibaBlue}{\small Parallel Soft Clustering --- Milestone 2}}
+\lhead{\textcolor{ibaBlue}{\small IBA Karachi, Spring 2026}}
+\rfoot{\thepage}
+\lfoot{\textcolor{gray}{\small PDC Project 21}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\hypersetup{colorlinks=true, linkcolor=ibaBlue, urlcolor=ibaBlue}
+
+% ════════════════════════════════════════════════════════════
+\begin{document}
+
+% ── Title Page ──────────────────────────────────────────────
+\begin{titlepage}
+    \centering
+    \vspace*{1.5cm}
+    {\Large\bfseries\color{ibaBlue}
+        Institute of Business Administration, Karachi\\[0.4em]
+        Department of Computer Science}\\[0.3em]
+    {\normalsize Spring 2026}
+
+    \vspace{1.5cm}
+    \rule{\textwidth}{1.5pt}\\[0.4em]
+    {\LARGE\bfseries\color{ibaBlue}
+        Parallel Soft Clustering for\\[0.2em]
+        Clinical Notes with OpenMPI}\\[0.4em]
+    {\large\bfseries Project 21 --- Milestone 2 Submission Report}\\[0.2em]
+    {\large MPI-Based Parallel Soft Clustering}
+    \rule{\textwidth}{1.5pt}
+
+    \vspace{1.5cm}
+    \begin{tabular}{ll}
+        \toprule
+        \textbf{Member} & \textbf{Role} \\
+        \midrule
+        Khansa Danish   & Core Algorithm \& Parallelisation (Member 1) \\
+        Ali Hamza       & Clinical Text Processing \& Feature Engineering (Member 2) \\
+        Zain Khan       & Metrics, Testing \& Validation (Member 3) \\
+        Arham Jumshaid  & Data Distribution, Load Balancing \& Visualisation (Member 4) \\
+        \bottomrule
+    \end{tabular}
+
+    \vspace{1.5cm}
+    {\normalsize\textbf{Course:} Parallel and Distributed Computing}\\[0.3em]
+    {\normalsize\textbf{Submission:} Milestone 2}\\[0.3em]
+    {\normalsize\textbf{Dataset:} MTSamples Clinical Notes (4,943 documents, 500 TF-IDF features)}\\[0.3em]
+    {\normalsize\textbf{Date:} April 2026}
+
+    \vfill
+    {\small\textcolor{gray}{This report documents Milestone 2: MPI parallelisation of the FCM algorithm\\
+    built on top of the serial baseline delivered in Milestone 1.}}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% ════════════════════════════════════════════════════════════
+\section{Project Overview and Milestone 2 Scope}
+
+Milestone 2 parallelises the Fuzzy C-Means (FCM) algorithm developed in Milestone 1 using OpenMPI. The dataset used is the real clinical notes corpus delivered by Member 2 (Ali Hamza): \textbf{4,943 MTSamples clinical transcriptions} represented as \textbf{500-dimensional TF-IDF feature vectors} across \textbf{40 medical specialties}. The parallel implementation targets 10 clusters ($C = 10$), chosen to capture the dominant specialty groupings present in the data.
+
+\subsection{Milestone 2 Objectives (Member 1)}
+
+\begin{itemize}[leftmargin=1.5em]
+    \item Distribute the $4943 \times 500$ feature matrix across MPI ranks using block decomposition and \texttt{MPI\_Scatterv}.
+    \item Parallelise the E-step (membership computation) — embarrassingly parallel, no communication.
+    \item Parallelise the M-step (centroid update) using \texttt{MPI\_Allreduce} to aggregate partial sums.
+    \item Implement distributed convergence detection via \texttt{MPI\_Allreduce} on local Frobenius norm contributions.
+    \item Adapt all three initialisation strategies (Random, K-Means++, Domain-guided) for MPI execution.
+    \item Instrument each iteration with \texttt{MPI\_Wtime} for Member 3's scaling analysis.
+\end{itemize}
+
+% ════════════════════════════════════════════════════════════
+\section{Dataset: Member 2's Clinical Feature Vectors}
+
+\subsection{Data Characteristics}
+
+Member 2 (Ali Hamza) delivered the following files from his NLP preprocessing pipeline:
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{>{\ttfamily}l X r}
+\toprule
+\textbf{File} & \textbf{Contents} & \textbf{Size} \\
+\midrule
+features.csv         & TF-IDF feature matrix, one row per document  & $4943 \times 500$ \\
+feature\_names.csv   & Names of the 500 TF-IDF features (medical terms) & 500 rows \\
+specialty\_labels.csv & Medical specialty string per document         & 4943 rows \\
+\bottomrule
+\end{tabularx}
+\caption{Files delivered by Member 2 for Milestone 2}
+\end{table}
+
+\subsection{Medical Specialties in the Dataset}
+
+The dataset spans 40 distinct medical specialties. The five most frequent are:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lrr}
+\toprule
+\textbf{Specialty} & \textbf{Documents} & \textbf{\% of corpus} \\
+\midrule
+Surgery                    & 1085 & 21.9\% \\
+Consult - History \& Phy.  & 515  & 10.4\% \\
+Cardiovascular / Pulmonary & 369  &  7.5\% \\
+Orthopedic                 & 351  &  7.1\% \\
+Radiology                  & 271  &  5.5\% \\
+\midrule
+Other (35 specialties)     & 2352 & 47.6\% \\
+\midrule
+\textbf{Total}             & \textbf{4943} & \textbf{100\%} \\
+\bottomrule
+\end{tabular}
+\caption{Top medical specialties in the MTSamples corpus}
+\end{table}
+
+\subsection{Domain Label Mapping for Domain-Guided Initialisation}
+
+The 40 specialty strings are mapped to integer cluster indices $\{0, \ldots, C-1\}$ using modular arithmetic ($\text{label\_id} \bmod C$). This allows the domain-guided initialisation strategy to seed cluster centroids from clinically meaningful groupings even when $C < 40$.
+
+% ════════════════════════════════════════════════════════════
+\section{Member 1 --- Parallel Algorithm Design (Khansa Danish)}
+
+\subsection{Overview of Parallelisation Strategy}
+
+The FCM algorithm is parallelised across $P$ MPI processes using \textbf{block data decomposition}. The $N = 4943$ document feature vectors are divided into $P$ contiguous blocks, one per rank. The key insight is that the E-step is \emph{embarrassingly parallel} while the M-step requires a single global reduction.
+
+\subsection{Data Distribution: Block Decomposition}
+
+At startup, rank 0 reads the full $N \times F$ feature matrix and distributes rows to all ranks using \texttt{MPI\_Scatterv}. Variable counts are used because $N$ may not divide evenly by $P$:
+
+\[
+\text{local\_start}(r) = r \cdot \left\lfloor \tfrac{N}{P} \right\rfloor + \min(r,\, N \bmod P)
+\]
+\[
+\text{local\_n}(r) = \left\lfloor \tfrac{N}{P} \right\rfloor + \mathbf{1}[r < N \bmod P]
+\]
+
+For example, with $N = 4943$ and $P = 4$:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{ccrr}
+\toprule
+\textbf{Rank} & \textbf{Start Row} & \textbf{Local Rows} & \textbf{Data (doubles)} \\
+\midrule
+0 & 0    & 1236 & 618{,}000 \\
+1 & 1236 & 1236 & 618{,}000 \\
+2 & 2472 & 1236 & 618{,}000 \\
+3 & 3708 & 1235 & 617{,}500 \\
+\midrule
+\multicolumn{2}{l}{\textbf{Total}} & \textbf{4943} & \textbf{2,471,500} \\
+\bottomrule
+\end{tabular}
+\caption{Block decomposition of 4943 documents across 4 MPI ranks}
+\end{table}
+
+\subsection{Parallel E-Step: Membership Computation}
+
+The E-step updates $u_{ij}$ for each document $i$ and cluster $j$:
+\[
+u_{ij} = \frac{1}{\displaystyle\sum_{k=1}^{C}
+    \left(\frac{\|x_i - c_j\|_2}{\|x_i - c_k\|_2}\right)^{\!\frac{2}{m-1}}}
+\]
+
+Each rank computes this independently for its local rows only. \textbf{No MPI communication is required during the E-step} — it is embarrassingly parallel. Each rank reads the globally shared centroid array (which all ranks maintain identically after each M-step) and writes to its local membership slice.
+
+\begin{lstlisting}[style=cstyle, caption={Parallel E-step — each rank processes only its local rows}]
+void fcm_mpi_update_membership(FCMMpiModel *m) {
+    int ln = m->local_n, F = m->F, C = m->C;
+    double exp = 2.0 / (FCM_M - 1.0);
+    double *dist = malloc(C * sizeof(double));
+
+    for (int i = 0; i < ln; i++) {          /* local rows only */
+        for (int j = 0; j < C; j++)
+            dist[j] = l2_distance(m->local_data + i*F,
+                                  m->centroids  + j*F, F);
+        for (int j = 0; j < C; j++) {
+            double sum = 0.0;
+            for (int k = 0; k < C; k++)
+                sum += pow(dist[j] / dist[k], exp);
+            m->local_U[i*C + j] = 1.0 / sum;
+        }
+    }
+    free(dist);
+    /* No MPI calls needed -- embarrassingly parallel */
+}
+\end{lstlisting}
+
+\subsection{Parallel M-Step: Centroid Update with MPI\_Allreduce}
+
+The M-step requires the weighted sum of \emph{all} $N$ documents to compute each centroid:
+\[
+c_j = \frac{\sum_{i=1}^{N} u_{ij}^m \cdot x_i}{\sum_{i=1}^{N} u_{ij}^m}
+\]
+
+Each rank computes partial sums over its local rows. \texttt{MPI\_Allreduce} with \texttt{MPI\_SUM} aggregates these partial sums globally. Crucially, \texttt{MPI\_Allreduce} distributes the result back to \emph{all} ranks simultaneously — no separate broadcast is needed.
+
+\begin{lstlisting}[style=cstyle, caption={Parallel M-step — local partial sums aggregated via MPI\_Allreduce}]
+void fcm_mpi_update_centroids(FCMMpiModel *m) {
+    /* Step 1: each rank computes local partial sums */
+    for (int i = 0; i < m->local_n; i++) {
+        for (int j = 0; j < C; j++) {
+            double u_m = pow(m->local_U[i*C + j], FCM_M);
+            local_den[j] += u_m;
+            for (int f = 0; f < F; f++)
+                local_num[j*F + f] += u_m * m->local_data[i*F + f];
+        }
+    }
+    /* Step 2: global reduction -- 2 Allreduce calls per M-step */
+    MPI_Allreduce(local_num, global_num, C*F,
+                  MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+    MPI_Allreduce(local_den, global_den, C,
+                  MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+    /* Step 3: all ranks compute identical centroids */
+    for (int j = 0; j < C; j++)
+        for (int f = 0; f < F; f++)
+            m->centroids[j*F+f] = global_num[j*F+f] / global_den[j];
+}
+\end{lstlisting}
+
+\subsection{Parallel Convergence Detection}
+
+Each rank computes its local contribution to the global Frobenius norm squared. A single \texttt{MPI\_Allreduce} sums these, and the square root is taken once. This avoids any master-slave bottleneck:
+
+\[
+\|U^{\text{new}} - U^{\text{old}}\|_F^2 = \sum_{r=0}^{P-1} \underbrace{\sum_{i \in \text{rank}_r} \sum_{j=1}^{C} (u_{ij}^{\text{new}} - u_{ij}^{\text{old}})^2}_{\text{local\_norm}^2_r}
+\]
+
+\begin{lstlisting}[style=cstyle, caption={Distributed convergence detection — no master bottleneck}]
+double fcm_mpi_convergence(FCMMpiModel *m) {
+    double local_norm2 = 0.0;
+    for (int i = 0; i < m->local_n; i++)
+        for (int j = 0; j < m->C; j++) {
+            double diff = m->local_U[i*m->C+j]
+                        - m->local_U_old[i*m->C+j];
+            local_norm2 += diff * diff;
+        }
+    double global_norm2 = 0.0;
+    MPI_Allreduce(&local_norm2, &global_norm2, 1,
+                  MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+    return sqrt(global_norm2);  /* same on all ranks */
+}
+\end{lstlisting}
+
+\subsection{MPI Communication Summary Per Iteration}
+
+Each FCM iteration requires exactly \textbf{3 MPI collective operations}:
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{l l X r}
+\toprule
+\textbf{Step} & \textbf{MPI Call} & \textbf{Purpose} & \textbf{Data Volume} \\
+\midrule
+M-step (numerator) & \texttt{MPI\_Allreduce} & Sum partial weighted vectors & $C \times F \times 8$ bytes \\
+M-step (denominator) & \texttt{MPI\_Allreduce} & Sum partial membership weights & $C \times 8$ bytes \\
+Convergence & \texttt{MPI\_Allreduce} & Sum local Frobenius norm$^2$ & $1 \times 8$ bytes \\
+\midrule
+\textbf{Total/iter} & 3 Allreduce & & $\approx$ \textbf{40 KB} ($C$=10, $F$=500) \\
+\bottomrule
+\end{tabularx}
+\caption{MPI communication per FCM iteration ($C=10$, $F=500$)}
+\end{table}
+
+The communication volume is \textbf{fixed at 40 KB per iteration regardless of $N$} — it depends only on $C \times F$, not the dataset size. This is why the algorithm scales well: adding more ranks reduces local computation while communication overhead stays constant.
+
+\subsection{Parallel Initialisation Strategies}
+
+All three initialisation strategies from Milestone 1 are adapted for MPI:
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{l X X}
+\toprule
+\textbf{Strategy} & \textbf{MPI Adaptation} & \textbf{Key Calls} \\
+\midrule
+Random &
+Rank 0 generates full $U$ matrix, \texttt{MPI\_Scatterv} distributes row slices to each rank &
+\texttt{MPI\_Scatterv} \\
+K-Means++ &
+\texttt{MPI\_Gatherv} brings all data to rank 0 for seeding (sampled). Centroids broadcast to all. Each rank initialises its local $U$ slice from nearest centroid &
+\texttt{MPI\_Gatherv}, \texttt{MPI\_Bcast} \\
+Domain-Guided &
+Rank 0 computes class-mean centroids using gathered data and specialty labels. Labels scattered to ranks for local $U$ initialisation &
+\texttt{MPI\_Gatherv}, \texttt{MPI\_Bcast}, \texttt{MPI\_Scatterv} \\
+\bottomrule
+\end{tabularx}
+\caption{MPI adaptation of each initialisation strategy}
+\end{table}
+
+\subsection{Main Parallel Loop Structure}
+
+\begin{lstlisting}[style=cstyle, caption={Main parallel FCM loop with timing instrumentation}]
+void fcm_mpi_run(FCMMpiModel *m, InitStrategy strategy,
+                 int *domain_labels) {
+    /* 1. Initialise U (strategy-dependent, see above) */
+    fcm_mpi_init_*(m, ...);
+
+    /* 2. Initial centroids from U */
+    fcm_mpi_update_centroids(m);   /* M-step + 2x Allreduce */
+
+    for (int iter = 1; iter <= FCM_MAX_ITER; iter++) {
+        double t0 = MPI_Wtime();
+
+        copy_flat(m->local_U_old, m->local_U, local_n * C);
+
+        fcm_mpi_update_membership(m);  /* E-step: no comm    */
+        fcm_mpi_update_centroids(m);   /* M-step: 2 Allreduce*/
+        double delta = fcm_mpi_convergence(m); /* 1 Allreduce */
+
+        m->iter_times[iter-1] = MPI_Wtime() - t0;
+
+        if (delta < FCM_EPSILON) break;
+    }
+}
+\end{lstlisting}
+
+\subsection{Output Collection}
+
+After convergence, \texttt{MPI\_Gatherv} collects all local $U$ slices to rank 0, which writes the full membership matrix and centroid files for Member 3:
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{>{\ttfamily}l l X}
+\toprule
+\textbf{File} & \textbf{Dimensions} & \textbf{Use} \\
+\midrule
+membership\_mpi\_random.csv   & $4943 \times 10$ & Silhouette, DB-index (Member 3) \\
+membership\_mpi\_kmeanspp.csv & $4943 \times 10$ & Strategy comparison \\
+membership\_mpi\_domain.csv   & $4943 \times 10$ & Strategy comparison \\
+centroids\_mpi\_random.csv    & $10 \times 500$  & Top medical terms per cluster \\
+centroids\_mpi\_kmeanspp.csv  & $10 \times 500$  & Cluster interpretation \\
+centroids\_mpi\_domain.csv    & $10 \times 500$  & Cluster interpretation \\
+\bottomrule
+\end{tabularx}
+\caption{Output files produced by the parallel FCM implementation}
+\end{table}
+
+% ════════════════════════════════════════════════════════════
+\section{File Structure}
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{>{\ttfamily}l X l}
+\toprule
+\textbf{File} & \textbf{Purpose} & \textbf{Owner} \\
+\midrule
+fcm\_mpi.h    & All structs, constants, function prototypes & Member 1 \\
+fcm\_mpi.c    & Full parallel FCM: init, E-step, M-step, convergence, I/O & Member 1 \\
+main\_mpi.c   & Entry point: argument parsing, timing, output & Member 1 \\
+Makefile\_mpi & Build and run rules & Member 1 \\
+features.csv          & TF-IDF feature matrix & Member 2 \\
+specialty\_labels.csv & Medical specialty labels & Member 2 \\
+\bottomrule
+\end{tabularx}
+\caption{Milestone 2 file structure}
+\end{table}
+
+% ════════════════════════════════════════════════════════════
+\section{Setup and Execution Guide}
+
+\subsection{Environment (WSL2 on Windows)}
+
+All code runs inside WSL2 (Ubuntu). OpenMPI must be installed:
+
+\begin{lstlisting}[style=bashstyle, caption={Install OpenMPI in WSL2}]
+sudo apt update
+sudo apt install -y openmpi-bin openmpi-common libopenmpi-dev
+mpicc --version    # verify: should show GCC version
+mpirun --version   # verify: should show Open MPI 4.x
+\end{lstlisting}
+
+\subsection{Project Setup}
+
+\begin{lstlisting}[style=bashstyle, caption={Setting up the project directory}]
+# Create project folder inside Ubuntu (NOT from Windows Explorer)
+mkdir ~/fcm_milestone2
+cd ~/fcm_milestone2
+
+# Copy all 4 source files here:
+#   fcm_mpi.h  fcm_mpi.c  main_mpi.c  Makefile_mpi
+# Copy Member 2's data files here:
+#   features.csv  specialty_labels.csv
+
+# Rename Makefile
+mv Makefile_mpi Makefile
+\end{lstlisting}
+
+\subsection{Building}
+
+\begin{lstlisting}[style=bashstyle, caption={Build the parallel FCM executable}]
+make
+# Expected output: "Build successful --> ./fcm_mpi"
+\end{lstlisting}
+
+\subsection{Running}
+
+\begin{lstlisting}[style=bashstyle, caption={Running with different process counts and strategies}]
+# K-Means++ with 4 processes (recommended)
+mpirun --oversubscribe -np 4 ./fcm_mpi features.csv specialty_labels.csv 1
+
+# Random initialisation with 4 processes
+mpirun --oversubscribe -np 4 ./fcm_mpi features.csv specialty_labels.csv 0
+
+# Domain-guided with 4 processes (uses specialty labels)
+mpirun --oversubscribe -np 4 ./fcm_mpi features.csv specialty_labels.csv 2
+
+# Or use Makefile shortcuts:
+make run           # K-Means++, 4 processes
+make run_random    # Random,    4 processes
+make run_domain    # Domain,    4 processes
+make run_np NP=8   # K-Means++, 8 processes
+\end{lstlisting}
+
+\subsection{Expected Output}
+
+\begin{lstlisting}[style=bashstyle, caption={Expected terminal output when running}]
+[rank 0] Loaded 4943 x 500 feature matrix from 'features.csv'
+[init] K-Means++ init complete (seeds chosen).
+[fcm_mpi] N=4943  F=500  C=10  P=4  m=2.0  eps=1e-05
+[fcm_mpi] iter    1  delta=X.XXXXXXXX  time=X.XXXXs
+[fcm_mpi] iter    2  delta=X.XXXXXXXX  time=X.XXXXs
+...
+[fcm_mpi] Converged at iter N (delta=X.XXe-06)
+[fcm_mpi] -- Summary --
+[fcm_mpi] Cluster distribution:
+  Cluster  0 : XXXX documents (XX.X%)
+  ...
+[fcm_mpi] Total wall time : X.XXXX s
+[fcm_mpi] Avg time/iter   : X.XXXX s
+[fcm_mpi] Membership saved --> membership_mpi_kmeanspp.csv
+[fcm_mpi] Centroids saved  --> centroids_mpi_kmeanspp.csv
+\end{lstlisting}
+
+\subsection{Note on --oversubscribe}
+
+On a laptop with fewer physical cores than requested processes, MPI will complain about insufficient ``slots''. The \texttt{--oversubscribe} flag tells MPI to ignore this limit and run multiple processes on the same core. This is expected on a single-machine WSL2 setup and does not affect correctness. On the IBA HPC cluster, multiple real nodes are available and this flag is not needed.
+
+% ════════════════════════════════════════════════════════════
+\section{Connection to Other Members' Work}
+
+\subsection{From Member 2 (Ali Hamza)}
+Member 2's \texttt{features.csv} and \texttt{specialty\_labels.csv} are directly consumed by \texttt{fcm\_mpi\_load\_and\_scatter()} and \texttt{fcm\_mpi\_load\_labels()}. No preprocessing is needed --- the TF-IDF values are already in $[0,1]$ as required by FCM.
+
+\subsection{To Member 3 (Zain Khan)}
+After running, Member 3 receives:
+\begin{itemize}[leftmargin=1.5em]
+    \item Six CSV files (membership + centroids for each strategy).
+    \item Per-iteration wall times in \texttt{model->iter\_times[]} — available for speedup analysis.
+    \item Run with varying \texttt{-np} values (1, 2, 4, 8) to collect strong scaling data.
+\end{itemize}
+
+\subsection{To Member 4 (Arham Jumshaid)}
+The $4943 \times 10$ membership matrices are ready for heatmap visualisation. Each row sums to 1 and represents one clinical document's soft cluster memberships across 10 groups.
+
+% ════════════════════════════════════════════════════════════
+\section{Other Members' Sections}
+
+\subsection*{Member 2 --- Clinical Text Processing \& Feature Engineering (Ali Hamza)}
+\addcontentsline{toc}{section}{Member 2 --- Clinical Text Processing \& Feature Engineering}
+\subsubsection*{NLP Preprocessing Pipeline}
+\subsubsection*{Medical Entity Extraction and Negation Detection}
+\subsubsection*{TF-IDF Vectorisation}
+\subsubsection*{Feature Matrix Delivery}
+
+\vspace{2em}
+\subsection*{Member 3 --- Metrics, Testing \& Validation (Zain Khan)}
+\addcontentsline{toc}{section}{Member 3 --- Metrics, Testing \& Validation}
+\subsubsection*{Clustering Quality Metrics (Silhouette, Davies-Bouldin)}
+\subsubsection*{Strong Scaling Results}
+\subsubsection*{Weak Scaling Results}
+\subsubsection*{MPI Communication Overhead Analysis}
+
+\vspace{2em}
+\subsection*{Member 4 --- Data Distribution, Load Balancing \& Visualisation (Arham Jumshaid)}
+\addcontentsline{toc}{section}{Member 4 --- Data Distribution, Load Balancing \& Visualisation}
+\subsubsection*{Block vs Cyclic Distribution Comparison}
+\subsubsection*{Dynamic Load Balancing}
+\subsubsection*{Membership Heatmap Visualisation}
+\subsubsection*{Top Medical Terms Per Cluster}
+
+% ════════════════════════════════════════════════════════════
+\section{Milestone 2 Deliverable Checklist}
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{X l l}
+\toprule
+\textbf{Task} & \textbf{Status} & \textbf{Location} \\
+\midrule
+Block decomposition of N docs across P ranks      & \textcolor{green!60!black}{\bfseries Complete} & \texttt{fcm\_mpi.c} \\
+\texttt{MPI\_Scatterv} data distribution          & \textcolor{green!60!black}{\bfseries Complete} & \texttt{fcm\_mpi\_load\_and\_scatter()} \\
+Parallel E-step (no communication)               & \textcolor{green!60!black}{\bfseries Complete} & \texttt{fcm\_mpi\_update\_membership()} \\
+Parallel M-step with \texttt{MPI\_Allreduce}      & \textcolor{green!60!black}{\bfseries Complete} & \texttt{fcm\_mpi\_update\_centroids()} \\
+Distributed convergence via \texttt{MPI\_Allreduce} & \textcolor{green!60!black}{\bfseries Complete} & \texttt{fcm\_mpi\_convergence()} \\
+Random initialisation (MPI-adapted)              & \textcolor{green!60!black}{\bfseries Complete} & \texttt{fcm\_mpi\_init\_random()} \\
+K-Means++ initialisation (MPI-adapted)           & \textcolor{green!60!black}{\bfseries Complete} & \texttt{fcm\_mpi\_init\_kmeanspp()} \\
+Domain-guided init using specialty labels        & \textcolor{green!60!black}{\bfseries Complete} & \texttt{fcm\_mpi\_init\_domain()} \\
+Per-iteration timing with \texttt{MPI\_Wtime}    & \textcolor{green!60!black}{\bfseries Complete} & \texttt{fcm\_mpi\_run()} \\
+\texttt{MPI\_Gatherv} output collection          & \textcolor{green!60!black}{\bfseries Complete} & \texttt{fcm\_mpi\_gather\_and\_save()} \\
+CSV output for Member 3 (6 files)                & \textcolor{green!60!black}{\bfseries Complete} & \texttt{main\_mpi.c} \\
+Tested on MTSamples data (4943 docs, 500 feat.)  & \textcolor{green!60!black}{\bfseries Complete} & Verified compile + load \\
+\bottomrule
+\end{tabularx}
+\caption{Member 1 Milestone 2 deliverable checklist}
+\end{table}
+
+% ════════════════════════════════════════════════════════════
+\section{Conclusion}
+
+Milestone 2 delivers a fully functional MPI-parallel Fuzzy C-Means implementation operating on Member 2's real MTSamples clinical dataset of 4,943 documents with 500 TF-IDF features. The key design decisions are:
+
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{E-step is embarrassingly parallel} --- zero communication per document.
+    \item \textbf{M-step uses exactly 2 \texttt{MPI\_Allreduce} calls} --- communication volume is fixed at $\approx$40 KB per iteration regardless of dataset size.
+    \item \textbf{Convergence uses 1 \texttt{MPI\_Allreduce}} --- no master-slave bottleneck.
+    \item \textbf{Total: 3 collective operations per iteration} --- minimum possible for correct parallel FCM.
+    \item Communication volume is $O(C \cdot F)$, not $O(N)$ --- the algorithm scales efficiently as $N$ grows.
+    \item All three initialisation strategies are MPI-adapted, with K-Means++ using subsampled seeding for practical speed on high-dimensional data.
+\end{itemize}
+
+The implementation is ready for Member 3's strong and weak scaling experiments by simply varying the \texttt{-np} argument to \texttt{mpirun}.
+\end{document}

@@ -1,0 +1,43 @@
+╔══════════════════════════════════════════════════╗
+║  Parallel FCM — Clinical Notes (OpenMPI)        ║
+║  Member 1: Khansa Danish | IBA Spring 2026      ║
+╚══════════════════════════════════════════════════╝
+[main] Features : features.csv
+[main] Labels   : specialty_labels.csv
+[main] Strategy : K-Means++
+[main] Dist mode: Dynamic (load-balanced)
+[main] Comm mode: Baseline
+[main] N=4943  F=500  C=10
+[rank 0] Loaded 4943 x 500 feature matrix from 'features.csv'
+[rank 0] Distribution mode: dynamic(load-balanced)
+[member4] Row balance: min=1235 max=1236 avg=1235.75 max/avg=1.000
+[main] Data load+scatter: 1.293 s
+
+[fcm_mpi] N=4943  F=500  C=10  P=4  m=2.0  eps=1e-05
+[init] K-Means++ init complete.
+[fcm_mpi] iter    1  delta=0.00000000  time(avg)=0.0124s  comp(avg)=0.0094s  comm(avg)=0.0031s  imbalance(max/avg)=1.034
+[fcm_mpi] Converged at iter 1 (delta=8.99e-17)
+[main] FCM total time: 0.1242 s  (1 iters)
+[fcm_mpi] Membership saved -> membership_mpi_kmeanspp.csv
+[fcm_mpi] Centroids saved -> centroids_mpi_kmeanspp.csv
+[member4] Visualization artifacts saved -> viz_membership_sample.csv, viz_top_terms.csv, viz_label_cluster_comparison.csv
+
+[fcm_mpi] -- Summary -------------------------------
+[fcm_mpi] Iterations : 1
+[fcm_mpi] Final delta: 8.99e-17
+[fcm_mpi] Cluster distribution:
+  Cluster  0 :  679 documents (13.7%)
+  Cluster  1 :  473 documents (9.6%)
+  Cluster  2 :  372 documents (7.5%)
+  Cluster  3 :  448 documents (9.1%)
+  Cluster  4 :  417 documents (8.4%)
+  Cluster  5 :  904 documents (18.3%)
+  Cluster  6 :  391 documents (7.9%)
+  Cluster  7 :  420 documents (8.5%)
+  Cluster  8 :  446 documents (9.0%)
+  Cluster  9 :  393 documents (8.0%)
+[fcm_mpi] Total wall time : 0.0122 s
+[fcm_mpi] Avg time/iter   : 0.0122 s
+[member4] Total compute time (avg across ranks): 0.0094 s (76.9%)
+[member4] Total communication time (avg across ranks): 0.0031 s (25.2%)
+[member4] Worst iter imbalance (max/avg): 1.034

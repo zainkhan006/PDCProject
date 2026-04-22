@@ -1,0 +1,48 @@
+╔══════════════════════════════════════════════════╗
+║  Parallel FCM — Clinical Notes (OpenMPI)        ║
+║  Member 1: Khansa Danish | IBA Spring 2026      ║
+╚══════════════════════════════════════════════════╝
+[main] Features : features.csv
+[main] Labels   : specialty_labels.csv
+[main] Strategy : K-Means++
+[main] Dist mode: Dynamic (load-balanced)
+[main] Comm mode: Baseline
+[main] N=4943  F=500  C=10
+[rank 0] Loaded 4943 x 500 feature matrix from 'features.csv'
+[rank 0] Distribution mode: dynamic(load-balanced)
+[member4] Row balance: min=617 max=618 avg=617.88 max/avg=1.000
+[main] Data load+scatter: 1.097 s
+
+[fcm_mpi] N=4943  F=500  C=10  P=8  m=2.0  eps=1e-05
+[init] K-Means++ init complete.
+[fcm_mpi] iter    1  delta=6.14817046  time(avg)=0.0062s  comp(avg)=0.0051s  comm(avg)=0.0010s  imbalance(max/avg)=1.034
+[fcm_mpi] iter    2  delta=6.61819252  time(avg)=0.0058s  comp(avg)=0.0049s  comm(avg)=0.0009s  imbalance(max/avg)=1.002
+[fcm_mpi] iter    3  delta=0.40485498  time(avg)=0.0059s  comp(avg)=0.0049s  comm(avg)=0.0010s  imbalance(max/avg)=1.001
+[fcm_mpi] iter    4  delta=0.06880649  time(avg)=0.0060s  comp(avg)=0.0048s  comm(avg)=0.0012s  imbalance(max/avg)=1.001
+[fcm_mpi] iter    5  delta=0.02133103  time(avg)=0.0057s  comp(avg)=0.0049s  comm(avg)=0.0008s  imbalance(max/avg)=1.001
+[fcm_mpi] iter   10  delta=0.00008511  time(avg)=0.0060s  comp(avg)=0.0051s  comm(avg)=0.0010s  imbalance(max/avg)=1.000
+[fcm_mpi] Converged at iter 12 (delta=9.37e-06)
+[main] FCM total time: 0.1767 s  (12 iters)
+[fcm_mpi] Membership saved -> membership_mpi_kmeanspp.csv
+[fcm_mpi] Centroids saved -> centroids_mpi_kmeanspp.csv
+[member4] Visualization artifacts saved -> viz_membership_sample.csv, viz_top_terms.csv, viz_label_cluster_comparison.csv
+
+[fcm_mpi] -- Summary -------------------------------
+[fcm_mpi] Iterations : 12
+[fcm_mpi] Final delta: 9.37e-06
+[fcm_mpi] Cluster distribution:
+  Cluster  0 :   42 documents (0.8%)
+  Cluster  1 : 2407 documents (48.7%)
+  Cluster  2 :    0 documents (0.0%)
+  Cluster  3 :    0 documents (0.0%)
+  Cluster  4 :    0 documents (0.0%)
+  Cluster  5 :    0 documents (0.0%)
+  Cluster  6 :    0 documents (0.0%)
+  Cluster  7 :    0 documents (0.0%)
+  Cluster  8 :    0 documents (0.0%)
+  Cluster  9 : 2494 documents (50.5%)
+[fcm_mpi] Total wall time : 0.0702 s
+[fcm_mpi] Avg time/iter   : 0.0059 s
+[member4] Total compute time (avg across ranks): 0.0591 s (84.2%)
+[member4] Total communication time (avg across ranks): 0.0114 s (16.2%)
+[member4] Worst iter imbalance (max/avg): 1.079

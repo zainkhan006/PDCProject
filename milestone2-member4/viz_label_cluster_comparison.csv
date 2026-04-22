@@ -1,0 +1,41 @@
+label,cluster_0,cluster_1,cluster_2,cluster_3,cluster_4,cluster_5,cluster_6,cluster_7,cluster_8,cluster_9,dominant_cluster,dominant_ratio
+Allergy / Immunology,0,0,1,0,0,0,0,0,3,3,8,0.428571
+Bariatrics,4,0,4,0,1,5,0,1,1,2,5,0.277778
+Cardiovascular / Pulmonary,78,37,18,49,33,44,38,13,28,31,0,0.211382
+Neurology,17,6,28,8,15,4,47,0,15,83,9,0.372197
+Dentistry,3,0,1,6,7,7,0,2,0,1,4,0.259259
+Urology,13,14,15,18,45,20,4,10,5,11,4,0.290323
+General Medicine,70,1,58,0,0,0,1,0,94,34,8,0.364341
+Surgery,9,138,2,196,336,229,14,135,3,23,4,0.309677
+Speech - Language,0,1,1,0,0,0,0,1,0,6,9,0.666667
+SOAP / Chart / Progress Notes,29,0,20,2,0,2,1,0,46,65,9,0.393939
+Sleep Medicine,2,0,1,3,0,0,3,1,0,10,9,0.500000
+Rheumatology,2,0,1,0,0,0,0,0,5,2,8,0.500000
+Radiology,26,4,6,13,7,7,135,7,8,58,6,0.498155
+Psychiatry / Psychology,3,0,13,0,0,0,1,0,2,34,9,0.641509
+Podiatry,1,1,6,1,2,0,5,22,3,6,7,0.468085
+Physical Medicine - Rehab,2,0,4,0,0,0,3,0,0,12,9,0.571429
+Pediatrics - Neonatal,2,1,19,2,4,3,3,2,26,8,8,0.371429
+Pain Management,4,8,0,4,21,18,0,3,0,1,4,0.355932
+Orthopedic,18,9,23,19,66,68,28,73,8,39,7,0.207977
+Ophthalmology,0,3,3,4,33,20,3,3,2,12,4,0.397590
+Office Notes,14,0,2,0,0,0,2,0,27,3,8,0.562500
+Obstetrics / Gynecology,5,17,5,45,23,10,15,3,9,23,3,0.290323
+Neurosurgery,0,12,0,16,37,20,0,7,0,2,4,0.393617
+Nephrology,12,3,6,8,8,7,20,5,6,6,6,0.246914
+Letters,3,0,0,0,0,0,1,0,1,18,9,0.782609
+Lab Medicine - Pathology,2,1,0,1,0,0,1,0,0,3,9,0.375000
+IME-QME-Work Comp etc.,1,0,2,0,0,0,0,0,2,11,9,0.687500
+Hospice - Palliative Care,1,0,2,0,0,0,0,0,2,1,2,0.333333
+Hematology - Oncology,17,3,21,4,15,7,3,4,8,8,2,0.233333
+Gastroenterology,18,31,14,46,26,28,21,10,16,12,3,0.207207
+ENT - Otolaryngology,1,6,6,9,26,13,5,10,8,12,4,0.270833
+Endocrinology,4,1,1,2,0,5,0,2,2,2,5,0.263158
+Emergency Room Reports,23,0,22,2,1,0,0,0,26,1,8,0.346667
+Discharge Summary,17,2,31,6,1,1,1,2,10,37,9,0.342593
+Diets and Nutritions,0,0,0,0,0,0,0,0,0,10,9,1.000000
+Dermatology,1,3,2,6,1,4,1,2,2,7,9,0.241379
+Cosmetic / Plastic Surgery,0,4,2,3,9,8,0,1,0,0,4,0.333333
+Consult - History and Phy.,140,0,144,1,0,3,10,0,116,101,2,0.279612
+Chiropractic,1,0,2,0,0,0,1,0,1,8,9,0.615385
+Autopsy,1,1,0,2,0,0,0,0,1,2,3,0.285714
